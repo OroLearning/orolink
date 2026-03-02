@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Log In — OroLink</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fafaf7;color:#1a1a1a;font-family:'DM Sans',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;-webkit-font-smoothing:antialiased;opacity:0;transition:opacity 0.2s}
+body.ready{opacity:1}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:40px;text-decoration:none;color:#1a1a1a}
+.logo-mark{width:42px;height:42px;border-radius:11px;background:#E2FF00;display:flex;align-items:center;justify-content:center}
+.logo-letter{color:#1a1a1a;font-weight:700;font-size:20px;line-height:1}
+.logo-name{font-size:22px;font-weight:700;letter-spacing:-0.3px}
+.card{max-width:400px;width:100%;background:#ffffff;border:1px solid #e8e8e3;border-radius:16px;padding:40px 36px;box-shadow:0 4px 24px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04)}
+.accent-line{width:40px;height:3px;background:#E2FF00;border-radius:2px;margin-bottom:20px}
+.success-msg{display:none;padding:10px 14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;color:#166534;font-size:13px;text-align:center;margin-bottom:20px}
+h1{font-size:20px;font-weight:700;margin-bottom:4px;letter-spacing:-0.3px}
+.subtitle{color:#6b6b6b;font-size:14px;margin-bottom:28px;line-height:1.5}
+.field{margin-bottom:18px}
+.field label{display:block;font-size:13px;font-weight:500;color:#6b6b6b;margin-bottom:6px}
+.field input{width:100%;padding:11px 14px;border-radius:10px;border:1.5px solid #e8e8e3;background:#fafaf7;color:#1a1a1a;font-family:'DM Sans',system-ui,sans-serif;font-size:15px;outline:none;transition:border-color 0.2s,box-shadow 0.2s}
+.field input::placeholder{color:#999}
+.field input:focus{border-color:#1a1a1a;box-shadow:0 0 0 3px rgba(26,26,26,0.06)}
+.btn-primary{width:100%;padding:13px;border-radius:11px;background:#1a1a1a;color:#fff;font-family:'DM Sans',system-ui,sans-serif;font-size:15px;font-weight:600;border:none;cursor:pointer;margin-top:8px;transition:background 0.2s,transform 0.1s}
+.btn-primary:hover{background:#333}
+.btn-primary:active{transform:scale(0.99)}
+.btn-primary:disabled{opacity:0.6;cursor:not-allowed}
+.err{color:#dc2626;font-size:13px;margin-top:10px;text-align:center;display:none;padding:8px 12px;background:#fef2f2;border-radius:8px}
+.footer-link{text-align:center;margin-top:18px;font-size:14px;color:#6b6b6b}
+.footer-link a{color:#1a1a1a;font-weight:600;text-decoration:none;border-bottom:1.5px solid #e8e8e3;transition:border-color 0.2s}
+.footer-link a:hover{border-color:#1a1a1a}
+.footer-link.muted a{color:#999;font-weight:400;font-size:13px;border-bottom:1px solid transparent}
+.footer-link.muted a:hover{border-bottom-color:#999}
+@media(max-width:480px){.card{padding:32px 24px;border-radius:14px}.logo{margin-bottom:32px}}
+</style>
+</head>
+<body>
+<a href="/" class="logo"><div class="logo-mark"><span class="logo-letter">O</span></div><span class="logo-name">OroLink</span></a>
+<div class="card">
+<div class="accent-line"></div>
+<div class="success-msg" id="success">Account created! Please log in.</div>
+<h1>Welcome back</h1>
+<p class="subtitle">Log in to your OroLink dashboard</p>
+<div class="field"><label>Email</label><input type="email" id="email" placeholder="you@email.com"></div>
+<div class="field"><label>Password</label><input type="password" id="password" placeholder="Enter your password"></div>
+<div class="err" id="err"></div>
+<button class="btn-primary" id="loginBtn" onclick="doLogin()">Log in</button>
+<p class="footer-link">Don't have an account? <a href="/signup.html">Sign up</a></p>
+<p class="footer-link muted"><a href="/forgot.html">Forgot password?</a></p>
+</div>
+
+<!-- Supabase JS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://xsqfdhymfgrobzovfgjf.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_lm-yWNpuWJkyk3OwMWN5qw_TsEQY6xA';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// If already logged in, redirect to dashboard. Otherwise show the page.
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    window.location.replace('/dashboard.html');
+  } else {
+    document.body.classList.add('ready');
+  }
+})();
+
+async function doLogin() {
+  const err = document.getElementById('err');
+  const btn = document.getElementById('loginBtn');
+  err.style.display = 'none';
+
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+
+  if (!email || !password) {
+    err.textContent = 'Please enter your email and password.';
+    err.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Logging in…';
+
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+
+  if (error) {
+    btn.disabled = false;
+    btn.textContent = 'Log in';
+    err.textContent = error.message === 'Invalid login credentials'
+      ? 'Incorrect email or password.'
+      : error.message;
+    err.style.display = 'block';
+    return;
+  }
+
+  window.location.href = '/dashboard.html';
+}
+
+// Enter key support
+document.getElementById('password').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doLogin();
+});
+document.getElementById('email').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') document.getElementById('password').focus();
+});
+
+// Show success message if redirected from signup
+(function() {
+  const p = new URLSearchParams(location.search);
+  if (p.get('registered')) {
+    document.getElementById('success').style.display = 'block';
+  }
+})();
+</script>
+</body>
+</html>

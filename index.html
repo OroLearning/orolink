@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OroLink — Your Links, One Page</title>
+<meta name="description" content="Create a beautiful link-in-bio page in 30 seconds. Premium themes, full analytics, custom branding. Better than Linktree.">
+<meta name="theme-color" content="#E2FF00">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta property="og:title" content="OroLink — Your Links, One Page">
+<meta property="og:description" content="Create a beautiful link-in-bio page in 30 seconds. Premium themes, full analytics, custom branding.">
+<meta property="og:url" content="https://link.orolearning.org">
+<meta property="og:type" content="website">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fafaf7;color:#1a1a1a;font-family:'DM Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#1a1a1a;text-decoration:none}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;max-width:1100px;margin:0 auto;position:sticky;top:0;background:rgba(250,250,247,0.95);backdrop-filter:blur(12px);z-index:100;border-bottom:1px solid #e8e8e3}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:20px;color:#1a1a1a}
+.logo-mark{width:36px;height:36px;border-radius:10px;background:#E2FF00;display:flex;align-items:center;justify-content:center;color:#1a1a1a;font-weight:800;font-size:18px}
+.nav-right{display:flex;align-items:center;gap:16px}
+.nav-link{color:#6b6b6b;font-size:14px;font-weight:500;transition:color 0.2s}
+.nav-link:hover{color:#1a1a1a}
+.nav-cta{padding:10px 20px;border-radius:10px;background:#1a1a1a;color:#fff;font-weight:600;font-size:14px;transition:background 0.2s}
+.nav-cta:hover{background:#333}
+
+/* HERO */
+.hero{max-width:700px;margin:0 auto;text-align:center;padding:80px 20px 60px}
+.hero-badge{display:inline-block;padding:6px 16px;border-radius:20px;background:rgba(226,255,0,0.15);color:#1a1a1a;font-size:13px;font-weight:600;margin-bottom:24px;border:1px solid rgba(226,255,0,0.4)}
+h1{font-size:clamp(36px,6vw,56px);font-weight:800;line-height:1.1;margin-bottom:16px;letter-spacing:-1.5px}
+h1 span{position:relative;display:inline-block}
+h1 span::after{content:'';position:absolute;bottom:4px;left:0;right:0;height:12px;background:rgba(226,255,0,0.4);z-index:-1;border-radius:2px}
+.hero-sub{font-size:18px;color:#6b6b6b;max-width:480px;margin:0 auto 36px;line-height:1.7}
+.claim-form{display:flex;gap:10px;max-width:420px;margin:0 auto 12px;flex-wrap:wrap;justify-content:center}
+.claim-form input{flex:1;min-width:200px;padding:14px 18px;border-radius:12px;border:1.5px solid #e8e8e3;background:#ffffff;color:#1a1a1a;font-family:'DM Sans',system-ui,sans-serif;font-size:16px;outline:none;transition:border-color 0.2s,box-shadow 0.2s}
+.claim-form input::placeholder{color:#999}
+.claim-form input:focus{border-color:#1a1a1a;box-shadow:0 0 0 3px rgba(26,26,26,0.06)}
+.claim-form button{padding:14px 28px;border-radius:12px;background:#1a1a1a;color:#fff;font-family:'DM Sans',system-ui,sans-serif;font-size:16px;font-weight:600;border:none;cursor:pointer;transition:background 0.2s,transform 0.1s}
+.claim-form button:hover{background:#333}
+.claim-form button:active{transform:scale(0.98)}
+.preview-url{font-size:13px;color:#999}
+.preview-url.taken{color:#dc2626}
+.preview-url.available{color:#16a34a}
+
+/* SECTIONS */
+.section{max-width:900px;margin:0 auto;padding:60px 20px}
+.section-title{text-align:center;font-size:28px;font-weight:700;margin-bottom:12px;letter-spacing:-0.5px}
+.section-sub{text-align:center;color:#6b6b6b;font-size:16px;margin-bottom:40px}
+
+/* FEATURES GRID */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.card{background:#ffffff;border:1px solid #e8e8e3;border-radius:14px;padding:28px 24px;transition:all 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.card:hover{border-color:#ccc;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.06)}
+.card-icon{width:44px;height:44px;border-radius:12px;background:rgba(226,255,0,0.15);display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:20px}
+.card h3{font-size:16px;font-weight:600;margin-bottom:6px}
+.card p{font-size:14px;color:#6b6b6b;line-height:1.6}
+
+/* PRICING */
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;max-width:900px;margin:0 auto}
+.price-card{background:#ffffff;border:1px solid #e8e8e3;border-radius:16px;padding:32px 28px;position:relative;box-shadow:0 1px 3px rgba(0,0,0,0.04);transition:all 0.2s}
+.price-card:hover{transform:translateY(-4px);box-shadow:0 8px 30px rgba(0,0,0,0.08)}
+.price-card.featured{border-color:#1a1a1a;box-shadow:0 0 0 1px #1a1a1a,0 8px 30px rgba(0,0,0,0.08)}
+.price-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#E2FF00;font-size:11px;font-weight:600;padding:4px 16px;border-radius:20px;white-space:nowrap}
+.price-name{font-size:13px;font-weight:600;color:#6b6b6b;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px}
+.price-amount{font-size:40px;font-weight:800;margin-bottom:4px;letter-spacing:-1px}
+.price-amount .old{font-size:20px;text-decoration:line-through;color:#999;font-weight:400;margin-right:4px}
+.price-amount .period{font-size:14px;font-weight:400;color:#6b6b6b}
+.price-desc{font-size:13px;color:#6b6b6b;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid #e8e8e3}
+.price-features{list-style:none;margin-bottom:28px}
+.price-features li{font-size:14px;padding:6px 0;display:flex;align-items:center;gap:8px;color:#6b6b6b}
+.price-features li::before{content:"✓";color:#1a1a1a;font-weight:700;font-size:14px}
+.price-btn{display:block;width:100%;padding:14px;border-radius:11px;text-align:center;font-weight:600;font-size:15px;transition:all 0.2s;border:none;cursor:pointer;font-family:'DM Sans',system-ui,sans-serif}
+.price-btn-primary{background:#1a1a1a;color:#fff}
+.price-btn-primary:hover{background:#333}
+.price-btn-outline{background:none;border:1.5px solid #e8e8e3;color:#1a1a1a}
+.price-btn-outline:hover{border-color:#1a1a1a}
+
+/* COMPARE */
+.compare{max-width:700px;margin:0 auto;padding:0 20px}
+table{width:100%;border-collapse:collapse;background:#ffffff;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.04);border:1px solid #e8e8e3}
+th,td{padding:14px 18px;text-align:left;font-size:14px;border-bottom:1px solid #f0f0ec}
+th{background:#fafaf7;font-weight:600;font-size:13px;color:#6b6b6b;text-transform:uppercase;letter-spacing:0.5px}
+.check{color:#166534;font-weight:600}
+.paid{color:#c2410c;font-size:12px;font-weight:500}
+
+/* CTA */
+.cta{text-align:center;padding:80px 20px}
+.cta h2{font-size:32px;font-weight:700;margin-bottom:12px;letter-spacing:-0.5px}
+.cta p{color:#6b6b6b;font-size:16px;margin-bottom:28px}
+.cta-btn{display:inline-block;padding:16px 40px;border-radius:12px;background:#1a1a1a;color:#fff;font-weight:700;font-size:18px;transition:background 0.2s,transform 0.1s}
+.cta-btn:hover{background:#333}
+.cta-btn:active{transform:scale(0.98)}
+
+/* FOOTER */
+footer{text-align:center;padding:32px 20px;border-top:1px solid #e8e8e3;color:#999;font-size:13px}
+footer a{color:#6b6b6b;transition:color 0.2s}
+footer a:hover{color:#1a1a1a}
+
+/* MOBILE */
+@media(max-width:640px){
+nav{padding:12px 16px}
+.nav-link{display:none}
+.hero{padding:60px 16px 40px}
+h1{font-size:clamp(28px,8vw,40px)}
+.hero-sub{font-size:16px}
+.claim-form{flex-direction:column}
+.claim-form input,.claim-form button{width:100%}
+.grid{grid-template-columns:1fr}
+.pricing-grid{grid-template-columns:1fr;max-width:380px;margin:0 auto}
+table{font-size:12px}
+th,td{padding:10px 12px}
+.section{padding:40px 16px}
+.cta{padding:60px 16px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+<a href="/" class="logo"><div class="logo-mark">O</div>OroLink</a>
+<div class="nav-right">
+<a href="#features" class="nav-link">Features</a>
+<a href="#pricing" class="nav-link">Pricing</a>
+<a href="/login.html" class="nav-link">Log in</a>
+<a href="/signup.html" class="nav-cta">Get started</a>
+</div>
+</nav>
+
+<div class="hero">
+<div class="hero-badge">Launch Price — Limited Time</div>
+<h1>Your links.<br><span>One page.</span></h1>
+<p class="hero-sub">Create a stunning link-in-bio page in 30 seconds. Premium themes, full analytics, and custom branding — at a fraction of what others charge.</p>
+<div class="claim-form">
+<input type="text" id="username" placeholder="yourname" maxlength="30" oninput="handleClaim(this)">
+<button onclick="claimUsername()">Claim your link</button>
+</div>
+<p class="preview-url" id="prev">link.orolearning.org/@yourname</p>
+</div>
+
+<div class="section" id="features">
+<h2 class="section-title">Everything you need. Nothing you don't.</h2>
+<p class="section-sub">Features that other tools charge RM 20-100/month for.</p>
+<div class="grid">
+<div class="card"><div class="card-icon">🔗</div><h3>Unlimited Links</h3><p>Add as many links as you want. No artificial limits on any plan.</p></div>
+<div class="card"><div class="card-icon">🎨</div><h3>8 Premium Themes</h3><p>Beautiful pre-built themes. Others charge RM 20/mo for this.</p></div>
+<div class="card"><div class="card-icon">📊</div><h3>Full Analytics</h3><p>Views, clicks, CTR, device breakdown. Know your audience.</p></div>
+<div class="card"><div class="card-icon">🖌️</div><h3>Custom Colors</h3><p>Match your brand perfectly with custom color options.</p></div>
+<div class="card"><div class="card-icon">📱</div><h3>Mobile Optimized</h3><p>Looks perfect on every device. Fast loading, smooth experience.</p></div>
+<div class="card"><div class="card-icon">⚡</div><h3>30-Second Setup</h3><p>Pick a username, add links, share. No complicated setup.</p></div>
+</div>
+</div>
+
+<div class="section" id="pricing">
+<h2 class="section-title">Simple pricing. No surprises.</h2>
+<p class="section-sub">Start free. Upgrade when you're ready.</p>
+<div class="pricing-grid">
+<div class="price-card">
+<div class="price-name">Starter</div>
+<div class="price-amount">Free</div>
+<p class="price-desc">Perfect to get started</p>
+<ul class="price-features">
+<li>Up to 5 links</li>
+<li>3 themes</li>
+<li>Basic analytics (views only)</li>
+<li>OroLink branding</li>
+<li>Avatar upload</li>
+</ul>
+<a href="/signup.html" class="price-btn price-btn-outline">Get started</a>
+</div>
+<div class="price-card featured">
+<div class="price-badge">Most Popular</div>
+<div class="price-name">Pro</div>
+<div class="price-amount"><span class="old">RM 19</span>RM 9<span class="period">/mo</span></div>
+<p class="price-desc">Launch price — limited time</p>
+<ul class="price-features">
+<li>Unlimited links</li>
+<li>All 8 premium themes</li>
+<li>Full analytics + CTR</li>
+<li>Custom colors</li>
+<li>Remove OroLink branding</li>
+<li>Social media icons</li>
+<li>Priority support</li>
+</ul>
+<a href="/signup.html" class="price-btn price-btn-primary">Start Pro — RM 9/mo</a>
+</div>
+<div class="price-card">
+<div class="price-name">Business</div>
+<div class="price-amount"><span class="old">RM 49</span>RM 19<span class="period">/mo</span></div>
+<p class="price-desc">For brands and businesses</p>
+<ul class="price-features">
+<li>Everything in Pro</li>
+<li>Custom domain support</li>
+<li>Advanced analytics</li>
+<li>Team access (coming soon)</li>
+<li>API access (coming soon)</li>
+<li>Dedicated support</li>
+</ul>
+<a href="/signup.html" class="price-btn price-btn-outline">Start Business — RM 19/mo</a>
+</div>
+</div>
+</div>
+
+<div class="section">
+<h2 class="section-title">How OroLink compares</h2>
+<p class="section-sub">See why creators are switching.</p>
+<div class="compare">
+<table>
+<tr><th>Feature</th><th>OroLink Pro</th><th>Linktree</th><th>Beacons</th></tr>
+<tr><td>Unlimited links</td><td class="check">✓ RM 9/mo</td><td class="check">✓ Free</td><td class="check">✓ Free</td></tr>
+<tr><td>Premium themes</td><td class="check">✓ RM 9/mo</td><td class="paid">$5/mo</td><td class="paid">$10/mo</td></tr>
+<tr><td>Full analytics</td><td class="check">✓ RM 9/mo</td><td class="paid">$9/mo</td><td class="paid">$10/mo</td></tr>
+<tr><td>Custom colors</td><td class="check">✓ RM 9/mo</td><td class="paid">$5/mo</td><td class="paid">$10/mo</td></tr>
+<tr><td>Remove branding</td><td class="check">✓ RM 9/mo</td><td class="paid">$9/mo</td><td class="paid">$10/mo</td></tr>
+<tr><td>Social icons</td><td class="check">✓ RM 9/mo</td><td class="paid">$5/mo</td><td class="check">✓ Free</td></tr>
+</table>
+</div>
+</div>
+
+<div class="cta">
+<h2>Ready to stand out?</h2>
+<p>Join thousands of creators building their online presence with OroLink.</p>
+<a href="/signup.html" class="cta-btn">Create your page</a>
+</div>
+
+<footer>
+<a href="https://orolearning.org">OroFlow</a> · <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a><br><br>
+© 2025 OroFlow Sdn Bhd. All rights reserved.
+</footer>
+
+<!-- Supabase JS SDK (for username availability check) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://xsqfdhymfgrobzovfgjf.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_lm-yWNpuWJkyk3OwMWN5qw_TsEQY6xA';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let checkTimer = null;
+
+function handleClaim(el) {
+  el.value = el.value.toLowerCase().replace(/[^a-z0-9_]/g, '');
+  const prev = document.getElementById('prev');
+  prev.className = 'preview-url';
+  prev.textContent = 'link.orolearning.org/@' + (el.value || 'yourname');
+
+  clearTimeout(checkTimer);
+  if (el.value.length >= 3) {
+    checkTimer = setTimeout(() => checkAvailability(el.value), 400);
+  }
+}
+
+async function checkAvailability(username) {
+  const prev = document.getElementById('prev');
+  const { data } = await sb.from('orolink_profiles').select('username').eq('username', username).maybeSingle();
+  if (data) {
+    prev.textContent = '"' + username + '" is already taken — try another';
+    prev.className = 'preview-url taken';
+  } else {
+    prev.textContent = 'link.orolearning.org/@' + username + ' is available!';
+    prev.className = 'preview-url available';
+  }
+}
+
+function claimUsername() {
+  const u = document.getElementById('username').value;
+  if (u.length >= 3) window.location.href = '/signup.html?u=' + u;
+}
+
+// Enter key support
+document.getElementById('username').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') claimUsername();
+});
+
+// Smooth scroll for nav links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
