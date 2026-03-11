@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign Up — OroLink</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fafaf7;color:#1a1a1a;font-family:'DM Sans',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;-webkit-font-smoothing:antialiased;opacity:0;transition:opacity 0.2s}
+body.ready{opacity:1}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:40px;text-decoration:none;color:#1a1a1a}
+.logo-mark{width:42px;height:42px;border-radius:11px;background:#E2FF00;display:flex;align-items:center;justify-content:center}
+.logo-letter{color:#1a1a1a;font-weight:700;font-size:20px;line-height:1}
+.logo-name{font-size:22px;font-weight:700;letter-spacing:-0.3px}
+.card{max-width:420px;width:100%;background:#ffffff;border:1px solid #e8e8e3;border-radius:16px;padding:40px 36px;box-shadow:0 4px 24px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04)}
+.accent-line{width:40px;height:3px;background:#E2FF00;border-radius:2px;margin-bottom:20px}
+h1{font-size:20px;font-weight:700;margin-bottom:4px;letter-spacing:-0.3px}
+.subtitle{color:#6b6b6b;font-size:14px;margin-bottom:28px;line-height:1.5}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:13px;font-weight:500;color:#6b6b6b;margin-bottom:6px}
+.field input{width:100%;padding:11px 14px;border-radius:10px;border:1.5px solid #e8e8e3;background:#fafaf7;color:#1a1a1a;font-family:'DM Sans',system-ui,sans-serif;font-size:15px;outline:none;transition:border-color 0.2s,box-shadow 0.2s}
+.field input::placeholder{color:#999}
+.field input:focus{border-color:#1a1a1a;box-shadow:0 0 0 3px rgba(26,26,26,0.06)}
+.username-hint{font-size:12px;color:#999;margin-top:4px}
+.username-taken{color:#dc2626}
+.username-available{color:#16a34a}
+.check-row{display:flex;align-items:flex-start;gap:10px;margin-top:16px;font-size:13px;color:#6b6b6b;line-height:1.5}
+.check-row input[type=checkbox]{margin-top:3px;accent-color:#1a1a1a;min-width:16px}
+.check-row a{color:#1a1a1a;font-weight:500}
+.btn-primary{width:100%;padding:13px;border-radius:11px;background:#1a1a1a;color:#fff;font-family:'DM Sans',system-ui,sans-serif;font-size:15px;font-weight:600;border:none;cursor:pointer;margin-top:24px;transition:background 0.2s,transform 0.1s}
+.btn-primary:hover{background:#333}
+.btn-primary:active{transform:scale(0.99)}
+.btn-primary:disabled{opacity:0.6;cursor:not-allowed}
+.pass-wrap{position:relative}
+.pass-wrap input{padding-right:60px}
+.pass-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:#999;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',system-ui,sans-serif;padding:4px}
+.err{color:#dc2626;font-size:13px;margin-top:10px;text-align:center;display:none;padding:8px 12px;background:#fef2f2;border-radius:8px}
+.btn-google{width:100%;padding:12px;border-radius:11px;background:#ffffff;color:#1a1a1a;font-family:'DM Sans',system-ui,sans-serif;font-size:15px;font-weight:600;border:1.5px solid #e8e8e3;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:10px}
+.btn-google:hover{border-color:#1a1a1a;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.btn-google:active{transform:scale(0.99)}
+.btn-google svg{width:18px;height:18px;flex-shrink:0}
+.divider{display:flex;align-items:center;gap:14px;margin:20px 0;color:#999;font-size:12px;font-weight:500}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:#e8e8e3}
+.footer-link{text-align:center;margin-top:18px;font-size:14px;color:#6b6b6b}
+.footer-link a{color:#1a1a1a;font-weight:600;text-decoration:none;border-bottom:1.5px solid #e8e8e3;transition:border-color 0.2s}
+.footer-link a:hover{border-color:#1a1a1a}
+@media(max-width:480px){.card{padding:32px 24px;border-radius:14px}.logo{margin-bottom:32px}}
+</style>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7PQ2KC9XCP"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-7PQ2KC9XCP");</script>
+</head>
+<body>
+<a href="/" class="logo"><div class="logo-mark"><span class="logo-letter">O</span></div><span class="logo-name">OroLink</span></a>
+<div class="card">
+<div class="accent-line"></div>
+<h1>Create your OroLink</h1>
+<p class="subtitle">Set up your page in 30 seconds.</p>
+<button class="btn-google" onclick="signInWithGoogle()">
+<svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+Continue with Google
+</button>
+<div class="divider">or sign up with email</div>
+<div class="field"><label>Username</label><input type="text" id="username" placeholder="yourname" maxlength="30" oninput="handleUsername(this)"><p class="username-hint" id="uhint">link.orolearning.org/@yourname</p></div>
+<div class="field"><label>Display Name</label><input type="text" id="display_name" placeholder="Your Name"></div>
+<div class="field"><label>Email</label><input type="email" id="email" placeholder="you@email.com"></div>
+<div class="field"><label>Password</label><div class="pass-wrap"><input type="password" id="password" placeholder="Min 8 characters"><button type="button" class="pass-toggle" onclick="togglePass('password',this)">Show</button></div></div>
+<div class="field"><label>Confirm Password</label><div class="pass-wrap"><input type="password" id="confirmpass" placeholder="Repeat your password"><button type="button" class="pass-toggle" onclick="togglePass('confirmpass',this)">Show</button></div></div>
+<div class="check-row"><input type="checkbox" id="tos"><span>I agree to the <a href="/terms.html" target="_blank">Terms of Service</a> and <a href="/privacy.html" target="_blank">Privacy Policy</a></span></div>
+<div class="check-row"><input type="checkbox" id="marketing"><span>Send me tips and updates (optional)</span></div>
+<div class="err" id="err"></div>
+<button class="btn-primary" id="signupBtn" onclick="doSignup()">Create my page</button>
+<p class="footer-link">Already have an account? <a href="/login.html">Log in</a></p>
+</div>
+
+<!-- Supabase JS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://paxggcgrvloxibtgphyo.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBheGdnY2dydmxveGlidGdwaHlvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxMzE1NTgsImV4cCI6MjA4ODcwNzU1OH0.fLKHMZgbjsUEcE0UQcPIRYIHRzhTLjw40X5VGIG6af8';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// If already logged in, redirect to dashboard
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    window.location.replace('/dashboard.html');
+  } else {
+    document.body.classList.add('ready');
+  }
+})();
+
+// Pre-fill username from URL param (e.g., /signup.html?u=arvin)
+(function() {
+  const p = new URLSearchParams(location.search);
+  if (p.get('u')) {
+    const u = p.get('u').toLowerCase().replace(/[^a-z0-9_]/g, '');
+    document.getElementById('username').value = u;
+    document.getElementById('uhint').textContent = 'link.orolearning.org/@' + u;
+  }
+})();
+
+// Username input handler with live availability check
+let checkTimer = null;
+function handleUsername(el) {
+  el.value = el.value.toLowerCase().replace(/[^a-z0-9_]/g, '');
+  const hint = document.getElementById('uhint');
+  hint.className = 'username-hint';
+  hint.textContent = 'link.orolearning.org/@' + (el.value || 'yourname');
+
+  clearTimeout(checkTimer);
+  if (el.value.length >= 3) {
+    checkTimer = setTimeout(() => checkUsername(el.value), 400);
+  }
+}
+
+async function checkUsername(username) {
+  const hint = document.getElementById('uhint');
+  const { data } = await sb.from('orolink_profiles').select('username').eq('username', username).maybeSingle();
+  if (data) {
+    hint.textContent = 'Username "' + username + '" is already taken';
+    hint.className = 'username-hint username-taken';
+  } else {
+    hint.textContent = 'link.orolearning.org/@' + username + ' — available!';
+    hint.className = 'username-hint username-available';
+  }
+}
+
+async function doSignup() {
+  const err = document.getElementById('err');
+  const btn = document.getElementById('signupBtn');
+  err.style.display = 'none';
+
+  const username = document.getElementById('username').value.trim();
+  const display_name = document.getElementById('display_name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+
+  // Validation
+  if (!username || username.length < 3) {
+    err.textContent = 'Username must be at least 3 characters.';
+    err.style.display = 'block';
+    return;
+  }
+  if (!display_name) {
+    err.textContent = 'Please enter your display name.';
+    err.style.display = 'block';
+    return;
+  }
+  if (!email) {
+    err.textContent = 'Please enter your email.';
+    err.style.display = 'block';
+    return;
+  }
+  if (password.length < 8) {
+    err.textContent = 'Password must be at least 8 characters.';
+    err.style.display = 'block';
+    return;
+  }
+  const confirmpass = document.getElementById('confirmpass').value;
+  if (password !== confirmpass) {
+    err.textContent = 'Passwords do not match.';
+    err.style.display = 'block';
+    return;
+  }
+  if (!document.getElementById('tos').checked) {
+    err.textContent = 'You must agree to the Terms of Service.';
+    err.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Creating your page…';
+
+  // Check username availability one more time
+  const { data: existing } = await sb.from('orolink_profiles').select('username').eq('username', username).maybeSingle();
+  if (existing) {
+    btn.disabled = false;
+    btn.textContent = 'Create my page';
+    err.textContent = 'That username is already taken. Try another.';
+    err.style.display = 'block';
+    return;
+  }
+
+  // Sign up with Supabase Auth
+  // The auth trigger (handle_orolink_signup) auto-creates the profile row
+  const { data, error } = await sb.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        username: username,
+        display_name: display_name,
+        consent_marketing: document.getElementById('marketing').checked
+      }
+    }
+  });
+
+  if (error) {
+    btn.disabled = false;
+    btn.textContent = 'Create my page';
+    err.textContent = error.message;
+    err.style.display = 'block';
+    return;
+  }
+
+  // If email confirmation is NOT required, user is logged in immediately
+  if (data.session) {
+    window.location.href = '/dashboard.html';
+  } else if (data.user && !data.session) {
+    // Fallback: in case Supabase still requires confirmation
+    window.location.href = '/login.html?registered=1';
+  }
+}
+
+// Google Sign-In
+function signInWithGoogle() {
+  sb.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: 'https://link.orolearning.org/dashboard.html'
+    }
+  });
+}
+
+// Toggle password visibility
+function togglePass(id, btn) {
+  const input = document.getElementById(id);
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = 'Hide';
+  } else {
+    input.type = 'password';
+    btn.textContent = 'Show';
+  }
+}
+
+// Enter key support
+document.getElementById('confirmpass').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doSignup();
+});
+</script>
+</body>
+</html>
