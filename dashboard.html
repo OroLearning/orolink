@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard — OroLink</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fafaf7;color:#1a1a1a;font-family:'DM Sans',system-ui,sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased;opacity:0;transition:opacity 0.2s}
+body.ready{opacity:1}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid #e8e8e3;position:sticky;top:0;background:#fafaf7;z-index:100}
+.topbar-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:#1a1a1a;font-weight:700;font-size:18px}
+.topbar-logo .icon{width:34px;height:34px;border-radius:9px;background:#E2FF00;display:flex;align-items:center;justify-content:center;color:#1a1a1a;font-weight:800;font-size:16px}
+.topbar-right{display:flex;align-items:center;gap:16px;font-size:14px}
+.topbar-right a{color:#6b6b6b;text-decoration:none;font-weight:500;font-size:13px;transition:color 0.2s}
+.topbar-right a:hover{color:#1a1a1a}
+.topbar-right a.view-link{color:#1a1a1a;font-weight:600;padding:6px 14px;background:#E2FF00;border-radius:8px;font-size:13px}
+.topbar-right a.view-link:hover{background:#d4d900}
+
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid #e8e8e3;padding:0 24px;gap:0;overflow-x:auto;background:#fafaf7}
+.tab{padding:14px 20px;font-size:14px;cursor:pointer;color:#999;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;font-family:'DM Sans',system-ui,sans-serif;font-weight:500}
+.tab:hover{color:#6b6b6b}
+.tab.active{color:#1a1a1a;border-bottom-color:#1a1a1a}
+
+/* CONTENT */
+.content{max-width:620px;margin:0 auto;padding:24px}
+.section{display:none}
+.section.active{display:block}
+h2{font-size:20px;margin-bottom:20px;font-weight:700;letter-spacing:-0.3px}
+
+/* CARDS */
+.card{background:#ffffff;border:1px solid #e8e8e3;border-radius:14px;padding:24px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+label{display:block;font-size:13px;color:#6b6b6b;margin-bottom:6px;margin-top:14px;font-weight:500}
+input[type=text],input[type=url],input[type=email],input[type=password],textarea,select{width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid #e8e8e3;background:#fafaf7;color:#1a1a1a;font-family:'DM Sans',system-ui,sans-serif;font-size:14px;outline:none;transition:border-color 0.2s,box-shadow 0.2s}
+input:focus,textarea:focus,select:focus{border-color:#1a1a1a;box-shadow:0 0 0 3px rgba(26,26,26,0.06)}
+input::placeholder,textarea::placeholder{color:#999}
+textarea{resize:vertical;min-height:60px}
+select{appearance:none;cursor:pointer}
+
+/* BUTTONS */
+.btn{padding:10px 20px;border-radius:10px;background:#1a1a1a;color:#fff;font-family:'DM Sans',system-ui,sans-serif;font-size:14px;font-weight:600;border:none;cursor:pointer;transition:all 0.2s;margin-top:12px}
+.btn:hover{background:#333}
+.btn:disabled{opacity:0.6;transform:none;cursor:not-allowed}
+.btn-sm{padding:8px 14px;font-size:12px;border-radius:8px;margin-top:0}
+.btn-danger{background:#dc2626}
+.btn-danger:hover{background:#b91c1c}
+.btn-outline{background:none;border:1.5px solid #e8e8e3;color:#1a1a1a}
+.btn-outline:hover{border-color:#1a1a1a}
+
+/* LINKS */
+.link-item{background:#ffffff;border:1px solid #e8e8e3;border-radius:12px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:12px;box-shadow:0 1px 2px rgba(0,0,0,0.03);transition:border-color 0.2s}
+.link-item:hover{border-color:#ccc}
+.link-info{flex:1;min-width:0}
+.link-title{font-weight:600;font-size:14px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.link-url{font-size:12px;color:#999;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.link-clicks{font-size:12px;color:#999;white-space:nowrap;margin-right:8px}
+.link-actions{display:flex;gap:6px}
+
+/* THEMES */
+.themes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.theme-btn{width:100%;aspect-ratio:1;border-radius:12px;border:2px solid #e8e8e3;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
+.theme-btn:hover{border-color:#ccc}
+.theme-btn.active{border-color:#1a1a1a;box-shadow:0 0 0 1px #1a1a1a}
+.theme-btn span{position:absolute;bottom:6px;left:0;right:0;text-align:center;font-size:9px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.8);font-weight:600;text-transform:capitalize}
+
+/* STATS */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.stat-box{background:#ffffff;border:1px solid #e8e8e3;border-radius:12px;padding:20px 16px;text-align:center;box-shadow:0 1px 2px rgba(0,0,0,0.03)}
+.stat-num{font-size:28px;font-weight:800;color:#1a1a1a}
+.stat-label{font-size:12px;color:#999;margin-top:4px;font-weight:500}
+.top-link{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0f0ec;font-size:13px;color:#6b6b6b}
+
+/* SETTINGS */
+.url-display{display:flex;align-items:center;gap:8px;background:#fafaf7;border:1px solid #e8e8e3;border-radius:10px;padding:12px 16px;margin-bottom:8px}
+.url-display span{flex:1;font-size:14px;color:#6b6b6b}
+
+/* MESSAGES */
+.msg{padding:10px 16px;border-radius:10px;margin-top:12px;font-size:13px;display:none;font-weight:500}
+.msg-ok{background:#f0fdf4;color:#166534;border:1px solid #bbf7d0;display:block}
+.msg-err{background:#fef2f2;color:#dc2626;border:1px solid #fecaca;display:block}
+
+/* AVATAR */
+.avatar-preview{width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid #e8e8e3}
+.avatar-placeholder{width:80px;height:80px;border-radius:50%;background:#E2FF00;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:#1a1a1a;border:2px solid #e8e8e3}
+.empty-state{text-align:center;padding:40px 20px;color:#999}
+.empty-state p{margin-bottom:8px}
+
+/* UPGRADE BANNER */
+.upgrade-banner{display:none;max-width:620px;margin:16px auto 0;padding:14px 20px;background:#ffffff;border:1px solid #e8e8e3;border-radius:12px;text-align:center;font-size:14px;color:#6b6b6b;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.upgrade-banner a{color:#1a1a1a;font-weight:600;text-decoration:none;border-bottom:1.5px solid #E2FF00}
+
+/* UPGRADE MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.show{display:flex}
+.modal{background:#ffffff;border:1px solid #e8e8e3;border-radius:16px;padding:32px;max-width:480px;width:100%;max-height:90vh;overflow-y:auto}
+.plan-card{background:#fafaf7;border:1px solid #e8e8e3;border-radius:12px;padding:20px;margin-bottom:12px;cursor:pointer;transition:border-color 0.2s}
+.plan-card:hover{border-color:#1a1a1a}
+.plan-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.plan-name{font-weight:700;font-size:15px}
+.plan-price{font-weight:700}
+.plan-price s{color:#999;font-weight:400;font-size:13px}
+.plan-desc{font-size:13px;color:#6b6b6b;line-height:1.5}
+.btn-ghost{width:100%;padding:12px;border-radius:10px;border:1.5px solid #e8e8e3;background:#ffffff;color:#6b6b6b;font-family:'DM Sans',system-ui,sans-serif;font-size:14px;cursor:pointer;transition:border-color 0.2s}
+.btn-ghost:hover{border-color:#1a1a1a}
+
+@media(max-width:640px){.content{padding:16px}.topbar{padding:12px 16px}.tabs{padding:0 12px}.stat-grid{grid-template-columns:1fr 1fr 1fr}.themes{grid-template-columns:repeat(4,1fr)}.card{padding:20px 16px}}
+</style>
+</head>
+<body>
+
+<!-- USERNAME PICKER (for Google sign-in users) -->
+<div class="modal-overlay" id="usernameModal">
+<div class="modal" style="max-width:400px">
+<h2 style="font-size:22px;margin-bottom:4px">Welcome to OroLink!</h2>
+<p style="color:#6b6b6b;font-size:14px;margin-bottom:20px">Choose a username for your page. This will be your public link.</p>
+<div style="margin-bottom:12px">
+<label style="font-size:13px;font-weight:500;color:#6b6b6b;display:block;margin-bottom:6px">Username</label>
+<input type="text" id="pickUsername" placeholder="yourname" maxlength="30" style="width:100%;padding:11px 14px;border-radius:10px;border:1.5px solid #e8e8e3;background:#fafaf7;font-family:'DM Sans',system-ui,sans-serif;font-size:15px;outline:none">
+<p id="pickHint" style="font-size:12px;color:#999;margin-top:4px">link.orolearning.org/@yourname</p>
+</div>
+<div style="margin-bottom:16px">
+<label style="font-size:13px;font-weight:500;color:#6b6b6b;display:block;margin-bottom:6px">Display Name</label>
+<input type="text" id="pickDisplayName" placeholder="Your Name" style="width:100%;padding:11px 14px;border-radius:10px;border:1.5px solid #e8e8e3;background:#fafaf7;font-family:'DM Sans',system-ui,sans-serif;font-size:15px;outline:none">
+</div>
+<div id="pickErr" style="color:#dc2626;font-size:13px;text-align:center;display:none;padding:8px 12px;background:#fef2f2;border-radius:8px;margin-bottom:12px"></div>
+<button class="btn" id="pickBtn" onclick="submitUsername()" style="width:100%;padding:13px;font-size:15px;font-weight:600">Claim my page</button>
+</div>
+</div>
+
+<div class="topbar">
+<a href="/" class="topbar-logo"><div class="icon">O</div>OroLink</a>
+<div class="topbar-right">
+<a href="/@" id="viewLink" target="_blank" class="view-link">View page</a>
+<a href="#" onclick="logout()">Log out</a>
+</div>
+</div>
+
+<div class="tabs">
+<button class="tab active" onclick="showTab('links',this)">Links</button>
+<button class="tab" onclick="showTab('appearance',this)">Appearance</button>
+<button class="tab" onclick="showTab('analytics',this)">Analytics</button>
+<button class="tab" onclick="showTab('settings',this)">Settings</button>
+</div>
+
+<div class="upgrade-banner" id="upgradeBanner">
+<span id="bannerText">Free plan: <b id="linkCount">0</b>/5 links used</span> · <a href="#" onclick="showUpgrade()">Upgrade to Pro →</a>
+</div>
+
+<div class="modal-overlay" id="upgradeModal">
+<div class="modal">
+<h2 style="font-size:22px;margin-bottom:4px">Upgrade your OroLink</h2>
+<p style="color:#6b6b6b;font-size:14px;margin-bottom:24px">Unlock more features for your page.</p>
+<div class="plan-card" onclick="requestUpgrade('pro')">
+<div class="plan-header"><span class="plan-name">Pro</span><span class="plan-price"><s>RM 19</s> RM 9/mo</span></div>
+<p class="plan-desc">Unlimited links · 15 themes (solids + gradients) · Full analytics · Custom colors</p>
+</div>
+<div class="plan-card" onclick="requestUpgrade('business')">
+<div class="plan-header"><span class="plan-name">Business</span><span class="plan-price"><s>RM 49</s> RM 19/mo</span></div>
+<p class="plan-desc">Everything in Pro · Custom background · Remove branding · Advanced analytics · Dedicated support</p>
+</div>
+<button class="btn-ghost" onclick="closeUpgrade()">Maybe later</button>
+</div>
+</div>
+
+<div class="content">
+<!-- PLAN INDICATOR -->
+<div class="card" id="planIndicator" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding:16px 20px">
+<div><span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#999">Current Plan</span><br><span id="currentPlan" style="font-size:18px;font-weight:800">Free</span></div>
+<button class="btn btn-sm" id="planUpgradeBtn" onclick="showUpgrade()" style="font-size:12px">Upgrade →</button>
+</div>
+<!-- LINKS TAB -->
+<div class="section active" id="sec-links">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px"><h2>Your Links</h2><span id="linkCounter" style="font-size:13px;color:#999;font-weight:500"></span></div>
+<div class="card">
+<label>Title</label>
+<input type="text" id="newTitle" placeholder="My Website">
+<label>URL</label>
+<input type="url" id="newUrl" placeholder="https://example.com">
+<label>Icon</label>
+<select id="newIcon"><option value="link">Link</option><option value="youtube">YouTube</option><option value="tiktok">TikTok</option><option value="instagram">Instagram</option><option value="shopee">Shopee</option><option value="whatsapp">WhatsApp</option><option value="email">Email</option><option value="music">Music</option><option value="store">Store</option><option value="globe">Website</option></select>
+<button class="btn" id="addBtn" onclick="addLink()">Add Link</button>
+</div>
+<div id="linksList"></div>
+</div>
+
+<!-- APPEARANCE TAB -->
+<div class="section" id="sec-appearance">
+<h2>Appearance</h2>
+<div class="card">
+<label>Avatar</label>
+<div id="avatarPreview"></div>
+<input type="file" id="avatarFile" accept="image/jpeg,image/png,image/webp" onchange="uploadAvatar()" style="font-size:13px;margin-top:8px;color:#6b6b6b">
+<p style="font-size:11px;color:#999;margin-top:4px">Max 2MB. JPG, PNG or WebP.</p>
+<label>Display Name</label>
+<input type="text" id="profName" placeholder="Your Name">
+<label>Bio</label>
+<textarea id="profBio" placeholder="Tell people about yourself"></textarea>
+</div>
+<div class="card">
+<label>Theme</label>
+<div class="themes" id="themeGrid"></div>
+<div id="customUploadSection" style="display:none;margin-top:16px;padding:16px;background:#fafaf7;border-radius:12px;border:1px solid #e8e8e3">
+<p style="font-size:13px;font-weight:600;margin-bottom:8px">Custom Background</p>
+<p style="font-size:12px;color:#999;margin-bottom:12px">Upload an image (max 3MB). It will fill the background of your profile page.</p>
+<input type="file" id="customBgInput" accept="image/jpeg,image/png,image/webp" style="font-size:13px;margin-bottom:10px">
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn" id="customBgBtn" onclick="uploadCustomBg()" style="padding:8px 16px;font-size:13px">Upload Background</button>
+<button class="btn btn-outline" id="removeBgBtn" onclick="removeCustomBg()" style="padding:8px 16px;font-size:13px;display:none;color:#dc2626;border-color:#fecaca">Remove Background</button>
+</div>
+<div id="bgPositionSection" style="display:none;margin-top:16px;padding-top:16px;border-top:1px solid #e8e8e3">
+<p style="font-size:12px;font-weight:600;margin-bottom:8px">Image Position</p>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+<span style="font-size:11px;color:#999;min-width:50px">Vertical</span>
+<input type="range" id="bgPosY" min="0" max="100" value="50" style="flex:1;accent-color:#1a1a1a" oninput="updateBgPosition()">
+<span id="bgPosYVal" style="font-size:11px;color:#999;min-width:30px">50%</span>
+</div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+<span style="font-size:11px;color:#999;min-width:50px">Zoom</span>
+<input type="range" id="bgZoom" min="100" max="200" value="100" style="flex:1;accent-color:#1a1a1a" oninput="updateBgPosition()">
+<span id="bgZoomVal" style="font-size:11px;color:#999;min-width:30px">100%</span>
+</div>
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+<span style="font-size:11px;color:#999;min-width:50px">Overlay</span>
+<input type="range" id="bgOverlay" min="0" max="80" value="50" style="flex:1;accent-color:#1a1a1a" oninput="updateBgPosition()">
+<span id="bgOverlayVal" style="font-size:11px;color:#999;min-width:30px">50%</span>
+</div>
+<p style="font-size:10px;color:#bbb;margin-top:4px">Adjust how your background looks. Changes save with the button below.</p>
+</div>
+</div>
+<div id="customColorsSection" style="display:none;margin-top:16px;padding:16px;background:#fafaf7;border-radius:12px;border:1px solid #e8e8e3">
+<p style="font-size:13px;font-weight:600;margin-bottom:12px">Custom Colors</p>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+<div>
+<label style="font-size:11px;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;display:block">Background</label>
+<div style="display:flex;align-items:center;gap:8px"><input type="color" id="colorBg" style="width:36px;height:36px;border:none;border-radius:8px;cursor:pointer;padding:0"><span id="colorBgHex" style="font-size:11px;color:#999;font-family:monospace"></span></div>
+</div>
+<div>
+<label style="font-size:11px;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;display:block">Button</label>
+<div style="display:flex;align-items:center;gap:8px"><input type="color" id="colorBtn" style="width:36px;height:36px;border:none;border-radius:8px;cursor:pointer;padding:0"><span id="colorBtnHex" style="font-size:11px;color:#999;font-family:monospace"></span></div>
+</div>
+<div>
+<label style="font-size:11px;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;display:block">Text</label>
+<div style="display:flex;align-items:center;gap:8px"><input type="color" id="colorText" style="width:36px;height:36px;border:none;border-radius:8px;cursor:pointer;padding:0"><span id="colorTextHex" style="font-size:11px;color:#999;font-family:monospace"></span></div>
+</div>
+</div>
+<p style="font-size:11px;color:#999;margin-top:10px">Pick colors to override your theme. Changes save with the button below.</p>
+</div>
+<div id="themePreview" style="margin-top:16px;border-radius:14px;border:1px solid #e8e8e3;overflow:hidden;transition:all 0.3s">
+<div id="previewInner" style="padding:28px 20px;text-align:center;transition:all 0.4s">
+<div id="prevAvatar" style="width:52px;height:52px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700"></div>
+<div id="prevName" style="font-size:15px;font-weight:700;margin-bottom:2px"></div>
+<div id="prevBio" style="font-size:12px;opacity:0.6;margin-bottom:14px"></div>
+<div id="prevLinks"></div>
+<p style="font-size:9px;opacity:0.3;margin-top:14px">Live preview</p>
+</div>
+</div>
+</div>
+<div class="card">
+<h3 style="font-size:15px;margin-bottom:4px;font-weight:600">Social Links</h3>
+<p style="font-size:12px;color:#999;margin-bottom:4px">Username only, not full URL</p>
+<label>TikTok</label><input type="text" id="socTiktok" placeholder="username">
+<label>Instagram</label><input type="text" id="socInstagram" placeholder="username">
+<label>YouTube</label><input type="text" id="socYoutube" placeholder="handle">
+<label>Twitter/X</label><input type="text" id="socTwitter" placeholder="username">
+<label>Facebook</label><input type="text" id="socFacebook" placeholder="username or page">
+</div>
+<button class="btn" id="saveBtn" onclick="saveAppearance()">Save Changes</button>
+<div class="msg" id="appMsg"></div>
+</div>
+
+<!-- ANALYTICS TAB -->
+<div class="section" id="sec-analytics">
+<h2>Analytics <span style="font-size:13px;color:#999;font-weight:400">Last 30 days</span></h2>
+<div class="stat-grid">
+<div class="stat-box"><div class="stat-num" id="statViews">0</div><div class="stat-label">Views</div></div>
+<div class="stat-box"><div class="stat-num" id="statClicks">0</div><div class="stat-label">Clicks</div></div>
+<div class="stat-box"><div class="stat-num" id="statCtr">0%</div><div class="stat-label">CTR</div></div>
+</div>
+
+<!-- ADVANCED: 30-Day Views Chart (Business only) -->
+<div class="card" id="chartSection" style="display:none">
+<h3 style="font-size:15px;margin-bottom:4px;font-weight:600">Views Over Time</h3>
+<p style="font-size:11px;color:#999;margin-bottom:16px">Daily page views — last 30 days</p>
+<div id="viewsChart" style="display:flex;align-items:flex-end;gap:3px;height:120px;padding:0 0 24px;position:relative;border-bottom:1px solid #f0f0ec"></div>
+<div id="chartLabels" style="display:flex;justify-content:space-between;margin-top:6px;font-size:9px;color:#bbb"></div>
+</div>
+
+<!-- ADVANCED: Traffic Sources (Business only) -->
+<div class="card" id="sourcesSection" style="display:none">
+<h3 style="font-size:15px;margin-bottom:4px;font-weight:600">Traffic Sources</h3>
+<p style="font-size:11px;color:#999;margin-bottom:16px">Where your visitors are coming from</p>
+<div id="trafficSources"></div>
+</div>
+
+<!-- ADVANCED: Peak Hours (Business only) -->
+<div class="card" id="peakSection" style="display:none">
+<h3 style="font-size:15px;margin-bottom:4px;font-weight:600">Peak Hours</h3>
+<p style="font-size:11px;color:#999;margin-bottom:16px">When your page gets the most visits</p>
+<div id="peakHours" style="display:flex;align-items:flex-end;gap:2px;height:80px;padding:0 0 20px;position:relative;border-bottom:1px solid #f0f0ec"></div>
+<div id="peakLabels" style="display:flex;justify-content:space-between;margin-top:6px;font-size:9px;color:#bbb"></div>
+</div>
+
+<div class="card"><h3 style="font-size:15px;margin-bottom:12px;font-weight:600">Top Links</h3><div id="topLinks"></div></div>
+<div class="card"><h3 style="font-size:15px;margin-bottom:12px;font-weight:600">Devices</h3><div id="deviceBreak"></div></div>
+</div>
+
+<!-- SETTINGS TAB -->
+<div class="section" id="sec-settings">
+<h2>Settings</h2>
+<div class="card">
+<label>Your OroLink URL</label>
+<div class="url-display"><span id="myUrl">link.orolearning.org/@username</span><button class="btn btn-sm" onclick="copyUrl()">Copy</button></div>
+</div>
+<div class="card">
+<label>Referral Code</label>
+<div class="url-display"><span id="myRef">-</span><button class="btn btn-sm" onclick="copyRef()">Copy</button></div>
+<p style="font-size:12px;color:#999;margin-top:8px">Share this code with friends. Referrals help us grow!</p>
+</div>
+<div class="card">
+<h3 style="font-size:15px;margin-bottom:8px;font-weight:600">Export Your Data</h3>
+<p style="font-size:13px;color:#6b6b6b;margin-bottom:12px">Download all your personal data as required by PDPA.</p>
+<button class="btn btn-outline" onclick="exportData()">Export My Data</button>
+</div>
+<div class="card" style="border-color:#fecaca">
+<h3 style="font-size:15px;margin-bottom:8px;font-weight:600;color:#dc2626">Delete Account</h3>
+<p style="font-size:13px;color:#6b6b6b;margin-bottom:12px">This permanently deletes all your data. Cannot be undone.</p>
+<button class="btn btn-danger" onclick="deleteAccount()">Delete My Account</button>
+</div>
+</div>
+</div>
+
+<!-- Supabase JS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://paxggcgrvloxibtgphyo.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBheGdnY2dydmxveGlidGdwaHlvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMxMzE1NTgsImV4cCI6MjA4ODcwNzU1OH0.fLKHMZgbjsUEcE0UQcPIRYIHRzhTLjw40X5VGIG6af8';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let profile = {};
+let userId = null;
+let currentLinks = [];
+
+const themes = {
+  // ─── FREE: 3 Classic Solids ───
+  midnight:  { bg: '#0f0f0f',  text: '#ffffff',  btn: '#E2FF00', btntxt: '#1a1a1a', tier: 'free',     type: 'solid' },
+  minimal:   { bg: '#ffffff',  text: '#111111',  btn: '#111111', btntxt: '#ffffff', tier: 'free',     type: 'solid' },
+  cream:     { bg: '#faf7f2',  text: '#44403c',  btn: '#78716c', btntxt: '#ffffff', tier: 'free',     type: 'solid' },
+
+  // ─── PRO: Premium Solids ───
+  ocean:     { bg: '#0c1929',  text: '#e0f2fe',  btn: '#0ea5e9', btntxt: '#ffffff', tier: 'pro',      type: 'solid' },
+  sunset:    { bg: '#1a0a0a',  text: '#fef2f2',  btn: '#f97316', btntxt: '#ffffff', tier: 'pro',      type: 'solid' },
+  forest:    { bg: '#0a1a0f',  text: '#ecfdf5',  btn: '#10b981', btntxt: '#ffffff', tier: 'pro',      type: 'solid' },
+  neon:      { bg: '#0a0a0a',  text: '#f0abfc',  btn: '#d946ef', btntxt: '#ffffff', tier: 'pro',      type: 'solid' },
+  rose:      { bg: '#1a0a12',  text: '#ffe4e6',  btn: '#f43f5e', btntxt: '#ffffff', tier: 'pro',      type: 'solid' },
+  charcoal:  { bg: '#1c1c1e',  text: '#f5f5f7',  btn: '#ffffff', btntxt: '#1c1c1e', tier: 'pro',      type: 'solid' },
+  sand:      { bg: '#f5f0e8',  text: '#3d3929',  btn: '#8b7d5e', btntxt: '#ffffff', tier: 'pro',      type: 'solid' },
+
+  // ─── PRO: Gradients ───
+  aurora:    { bg: 'linear-gradient(135deg, #0f0c29, #302b63, #24243e)', text: '#e0e7ff', btn: '#818cf8', btntxt: '#ffffff', tier: 'pro', type: 'gradient' },
+  twilight:  { bg: 'linear-gradient(135deg, #0f172a, #1e1b4b, #312e81)', text: '#c7d2fe', btn: '#6366f1', btntxt: '#ffffff', tier: 'pro', type: 'gradient' },
+  coral:     { bg: 'linear-gradient(135deg, #1a0a0a, #4a1011, #7f1d1d)', text: '#fecdd3', btn: '#fb7185', btntxt: '#ffffff', tier: 'pro', type: 'gradient' },
+  mint:      { bg: 'linear-gradient(135deg, #042f2e, #064e3b, #065f46)', text: '#a7f3d0', btn: '#34d399', btntxt: '#064e3b', tier: 'pro', type: 'gradient' },
+  golden:    { bg: 'linear-gradient(135deg, #1c1917, #44403c, #57534e)', text: '#fef3c7', btn: '#fbbf24', btntxt: '#1c1917', tier: 'pro', type: 'gradient' },
+
+  // ─── BUSINESS: Custom Image ───
+  custom:    { bg: '#0f0f0f',  text: '#ffffff',  btn: '#E2FF00', btntxt: '#1a1a1a', tier: 'business', type: 'custom' }
+};
+
+// ─── INIT ───
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.replace('/login.html'); return; }
+  userId = session.user.id;
+
+  // Auth confirmed — show the page
+  document.body.classList.add('ready');
+
+  // Load profile — use maybeSingle() to avoid 406 error
+  let { data: prof } = await sb.from('orolink_profiles').select('*').eq('id', userId).maybeSingle();
+
+  // If no profile exists — could be Google user or legacy signup
+  if (!prof) {
+    const user = session.user;
+    const isOAuth = user.app_metadata?.provider === 'google' || user.app_metadata?.providers?.includes('google');
+
+    if (isOAuth) {
+      // Google user — show username picker
+      const displayName = user.user_metadata?.full_name || user.user_metadata?.name || '';
+      document.getElementById('pickDisplayName').value = displayName;
+
+      // Suggest username from email
+      const suggested = user.email.split('@')[0].replace(/[^a-z0-9_]/gi, '').toLowerCase().substring(0, 30);
+      document.getElementById('pickUsername').value = suggested;
+      document.getElementById('pickHint').textContent = 'link.orolearning.org/@' + suggested;
+
+      // Live username input
+      document.getElementById('pickUsername').addEventListener('input', function() {
+        this.value = this.value.toLowerCase().replace(/[^a-z0-9_]/g, '');
+        document.getElementById('pickHint').textContent = 'link.orolearning.org/@' + (this.value || 'yourname');
+      });
+
+      document.getElementById('usernameModal').classList.add('show');
+      return; // Stop init — submitUsername will continue
+    }
+
+    // Non-OAuth fallback: auto-create profile
+    const refCode = 'ORO-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+    const { data: newProf, error: insertErr } = await sb.from('orolink_profiles').insert({
+      id: userId,
+      email: user.email,
+      username: user.user_metadata?.username || user.email.split('@')[0].replace(/[^a-z0-9_]/gi, '').toLowerCase(),
+      display_name: user.user_metadata?.display_name || user.user_metadata?.username || '',
+      plan: 'free',
+      referral_code: refCode,
+      views: 0
+    }).select().single();
+
+    if (insertErr) {
+      alert('Error setting up your profile. Please try logging out and signing up again.');
+      return;
+    }
+    prof = newProf;
+  }
+
+  loadDashboard(prof);
+}
+
+// ─── SUBMIT USERNAME (Google users) ───
+async function submitUsername() {
+  const errEl = document.getElementById('pickErr');
+  const btn = document.getElementById('pickBtn');
+  errEl.style.display = 'none';
+
+  const username = document.getElementById('pickUsername').value.trim();
+  const displayName = document.getElementById('pickDisplayName').value.trim();
+
+  if (!username || username.length < 3) {
+    errEl.textContent = 'Username must be at least 3 characters.';
+    errEl.style.display = 'block';
+    return;
+  }
+  if (!/^[a-z0-9_]+$/.test(username)) {
+    errEl.textContent = 'Only lowercase letters, numbers, and underscores.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Checking…';
+
+  // Check if username taken
+  const { data: existing } = await sb.from('orolink_profiles').select('username').eq('username', username).maybeSingle();
+  if (existing) {
+    btn.disabled = false;
+    btn.textContent = 'Claim my page';
+    errEl.textContent = 'Username "' + username + '" is already taken. Try another.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  btn.textContent = 'Creating…';
+
+  const { data: { session } } = await sb.auth.getSession();
+  const user = session.user;
+  const refCode = 'ORO-' + Math.random().toString(36).substring(2, 10).toUpperCase();
+
+  const { data: newProf, error: insertErr } = await sb.from('orolink_profiles').insert({
+    id: userId,
+    email: user.email,
+    username: username,
+    display_name: displayName || username,
+    plan: 'free',
+    referral_code: refCode,
+    views: 0
+  }).select().single();
+
+  if (insertErr) {
+    btn.disabled = false;
+    btn.textContent = 'Claim my page';
+    errEl.textContent = 'Error: ' + insertErr.message;
+    errEl.style.display = 'block';
+    return;
+  }
+
+  // Close modal and load dashboard
+  document.getElementById('usernameModal').classList.remove('show');
+  loadDashboard(newProf);
+}
+
+// ─── LOAD DASHBOARD ───
+function loadDashboard(prof) {
+  profile = prof;
+
+  document.getElementById('viewLink').href = '/@' + profile.username;
+  document.getElementById('myUrl').textContent = 'link.orolearning.org/@' + profile.username;
+  document.getElementById('myRef').textContent = profile.referral_code || '-';
+  document.getElementById('profName').value = profile.display_name || '';
+  document.getElementById('profBio').value = profile.bio || '';
+  document.getElementById('socTiktok').value = profile.social_tiktok || '';
+  document.getElementById('socInstagram').value = profile.social_instagram || '';
+  document.getElementById('socYoutube').value = profile.social_youtube || '';
+  document.getElementById('socTwitter').value = profile.social_twitter || '';
+  document.getElementById('socFacebook').value = profile.social_facebook || '';
+
+  if (profile.avatar_url) {
+    document.getElementById('avatarPreview').innerHTML = '<img src="' + profile.avatar_url + '" class="avatar-preview">';
+  } else {
+    document.getElementById('avatarPreview').innerHTML = '<div class="avatar-placeholder">' + (profile.username || 'U').charAt(0).toUpperCase() + '</div>';
+  }
+
+  renderThemes();
+  loadLinks();
+  loadAnalytics();
+
+  // ─── PLAN INDICATOR ───
+  const plan = profile.plan || 'free';
+  const planNames = { free: 'Free', pro: 'Pro', business: 'Business' };
+  const planEl = document.getElementById('currentPlan');
+  planEl.textContent = planNames[plan] || 'Free';
+  if (plan === 'pro') planEl.style.color = '#E2FF00'; planEl.style.textShadow = plan !== 'free' ? '0 0 0' : '';
+  if (plan === 'business') planEl.style.color = '#fbbf24';
+  if (plan !== 'free') document.getElementById('planUpgradeBtn').style.display = 'none';
+
+  if (plan === 'free') {
+    document.getElementById('upgradeBanner').style.display = 'block';
+  } else {
+    document.getElementById('upgradeBanner').style.display = 'none';
+  }
+
+  // ─── CUSTOM COLORS (Pro+) ───
+  if (plan === 'pro' || plan === 'business') {
+    const ccSection = document.getElementById('customColorsSection');
+    ccSection.style.display = 'block';
+    const t = themes[profile.theme] || themes['midnight'];
+    document.getElementById('colorBg').value = profile.custom_bg || (t.type === 'gradient' ? '#0f0f0f' : t.bg);
+    document.getElementById('colorBtn').value = profile.custom_btn_color || t.btn;
+    document.getElementById('colorText').value = profile.custom_text_color || t.text;
+    document.getElementById('colorBgHex').textContent = document.getElementById('colorBg').value;
+    document.getElementById('colorBtnHex').textContent = document.getElementById('colorBtn').value;
+    document.getElementById('colorTextHex').textContent = document.getElementById('colorText').value;
+
+    // Live preview on color change
+    ['colorBg','colorBtn','colorText'].forEach(id => {
+      document.getElementById(id).addEventListener('input', function() {
+        document.getElementById(id + 'Hex').textContent = this.value;
+        updateThemePreview(profile.theme);
+      });
+    });
+  }
+}
+
+// ─── THEMES ───
+function renderThemes() {
+  const g = document.getElementById('themeGrid');
+  g.innerHTML = '';
+  const plan = profile.plan || 'free';
+  const canAccess = { free: ['free'], pro: ['free','pro'], business: ['free','pro','business'] };
+  const allowed = canAccess[plan] || canAccess['free'];
+
+  // Group by tier
+  const tiers = [
+    { key: 'free', label: 'Free' },
+    { key: 'pro', label: 'Pro' },
+    { key: 'business', label: 'Business' }
+  ];
+
+  tiers.forEach(tier => {
+    const tierThemes = Object.entries(themes).filter(([k, v]) => v.tier === tier.key);
+    if (!tierThemes.length) return;
+
+    // Tier label
+    const label = document.createElement('div');
+    label.style.cssText = 'grid-column:1/-1;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#999;margin-top:12px;display:flex;align-items:center;gap:8px';
+    label.innerHTML = tier.label;
+    if (!allowed.includes(tier.key)) label.innerHTML += ' <span style="font-size:10px">🔒</span>';
+    g.appendChild(label);
+
+    tierThemes.forEach(([t, theme]) => {
+      if (t === 'custom') {
+        // Custom image upload button
+        const b = document.createElement('button');
+        b.className = 'theme-btn' + (profile.theme === 'custom' ? ' active' : '');
+        b.style.background = '#1a1a1a';
+        b.style.display = 'flex';
+        b.style.alignItems = 'center';
+        b.style.justifyContent = 'center';
+        if (!allowed.includes('business')) {
+          b.style.opacity = '0.4';
+          b.innerHTML = '<span style="font-size:16px">📷</span><span>Custom 🔒</span>';
+          b.onclick = () => showUpgrade();
+        } else {
+          if (profile.custom_bg_url) {
+            b.style.backgroundImage = 'url(' + profile.custom_bg_url + ')';
+            b.style.backgroundSize = 'cover';
+            b.style.backgroundPosition = 'center';
+          }
+          b.innerHTML = '<span style="font-size:16px">📷</span><span>Custom</span>';
+          b.onclick = () => {
+            document.querySelectorAll('.theme-btn').forEach(x => x.classList.remove('active'));
+            b.classList.add('active');
+            profile.theme = 'custom';
+            document.getElementById('customUploadSection').style.display = 'block';
+            if (profile.custom_bg_url) showBgControls();
+            updateThemePreview('custom');
+          };
+        }
+        g.appendChild(b);
+        return;
+      }
+
+      const locked = !allowed.includes(theme.tier);
+      const b = document.createElement('button');
+      b.className = 'theme-btn' + (profile.theme === t ? ' active' : '');
+      if (theme.type === 'gradient') {
+        b.style.background = theme.bg;
+      } else {
+        b.style.background = theme.bg;
+        b.style.boxShadow = 'inset 0 -20px 30px ' + theme.btn + '44';
+      }
+      if (locked) {
+        b.style.opacity = '0.4';
+        b.innerHTML = '<span>' + t + ' 🔒</span>';
+        b.onclick = () => showUpgrade();
+      } else {
+        b.innerHTML = '<span>' + t + '</span>';
+        b.onclick = () => {
+          document.querySelectorAll('.theme-btn').forEach(x => x.classList.remove('active'));
+          b.classList.add('active');
+          profile.theme = t;
+          document.getElementById('customUploadSection').style.display = 'none';
+          updateThemePreview(t);
+        };
+      }
+      g.appendChild(b);
+    });
+  });
+
+  // Show initial preview
+  if (profile.theme === 'custom') {
+    document.getElementById('customUploadSection').style.display = 'block';
+    if (profile.custom_bg_url) showBgControls();
+  }
+  updateThemePreview(profile.theme || 'midnight');
+}
+
+function updateThemePreview(themeName) {
+  const t = themes[themeName];
+  if (!t) return;
+  const inner = document.getElementById('previewInner');
+  const plan = profile.plan || 'free';
+  const hasCustomColors = (plan === 'pro' || plan === 'business');
+
+  // Get colors - use custom if available and pro+
+  let bgColor = t.bg;
+  let textColor = t.text;
+  let btnColor = t.btn;
+  let btnTextColor = t.btntxt;
+
+  if (hasCustomColors) {
+    const cbg = document.getElementById('colorBg');
+    const cbtn = document.getElementById('colorBtn');
+    const ctxt = document.getElementById('colorText');
+    if (cbg) bgColor = cbg.value || bgColor;
+    if (cbtn) btnColor = cbtn.value || btnColor;
+    if (ctxt) textColor = ctxt.value || textColor;
+  }
+
+  if (themeName === 'custom' && profile.custom_bg_url) {
+    inner.style.background = 'url(' + profile.custom_bg_url + ') center/cover';
+    inner.style.position = 'relative';
+  } else if (t.type === 'gradient' && !hasCustomColors) {
+    inner.style.background = t.bg;
+  } else {
+    inner.style.background = bgColor;
+  }
+  inner.style.color = textColor;
+
+  // Avatar
+  const av = document.getElementById('prevAvatar');
+  av.style.background = btnColor;
+  av.style.color = btnTextColor;
+  const name = profile.display_name || profile.username || '?';
+  av.textContent = name.charAt(0).toUpperCase();
+
+  // Name & bio
+  document.getElementById('prevName').textContent = '@' + (profile.username || 'you');
+  document.getElementById('prevBio').textContent = profile.bio || 'Your bio here';
+
+  // Preview links
+  const pl = document.getElementById('prevLinks');
+  pl.innerHTML = '';
+  const sampleLinks = currentLinks && currentLinks.length > 0
+    ? currentLinks.slice(0, 3)
+    : [{ title: 'My Website' }, { title: 'Follow Me' }];
+  sampleLinks.forEach(link => {
+    pl.innerHTML += '<div style="background:' + btnColor + ';color:' + btnTextColor + ';padding:10px 16px;border-radius:10px;margin-bottom:6px;font-size:12px;font-weight:600">' + esc(link.title) + '</div>';
+  });
+}
+
+// ─── CUSTOM BG UPLOAD ───
+async function uploadCustomBg() {
+  const input = document.getElementById('customBgInput');
+  if (!input.files.length) return;
+  const file = input.files[0];
+  if (file.size > 3 * 1024 * 1024) { alert('Image must be under 3MB.'); return; }
+
+  const btn = document.getElementById('customBgBtn');
+  btn.disabled = true;
+  btn.textContent = 'Uploading…';
+
+  const ext = file.name.split('.').pop().toLowerCase();
+  const filePath = userId + '/custom-bg.' + ext;
+  const { error: uploadErr } = await sb.storage.from('avatars').upload(filePath, file, {
+    cacheControl: '3600',
+    upsert: true,
+    contentType: file.type
+  });
+
+  if (uploadErr) { alert('Upload failed: ' + uploadErr.message); btn.disabled = false; btn.textContent = 'Upload Background'; return; }
+
+  const { data: urlData } = sb.storage.from('avatars').getPublicUrl(filePath);
+  const bgUrl = urlData.publicUrl + '?t=' + Date.now();
+
+  await sb.from('orolink_profiles').update({ custom_bg_url: bgUrl }).eq('id', userId);
+  profile.custom_bg_url = bgUrl;
+
+  btn.disabled = false;
+  btn.textContent = 'Upload Background';
+  showBgControls();
+  updateThemePreview('custom');
+}
+
+async function removeCustomBg() {
+  if (!confirm('Remove your custom background?')) return;
+
+  const btn = document.getElementById('removeBgBtn');
+  btn.disabled = true;
+  btn.textContent = 'Removing…';
+
+  // Delete from storage
+  const extensions = ['jpg', 'jpeg', 'png', 'webp'];
+  for (const ext of extensions) {
+    await sb.storage.from('avatars').remove([userId + '/custom-bg.' + ext]);
+  }
+
+  // Clear from profile
+  await sb.from('orolink_profiles').update({
+    custom_bg_url: '',
+    custom_bg_pos_y: '50',
+    custom_bg_zoom: '100',
+    custom_bg_overlay: '50'
+  }).eq('id', userId);
+
+  profile.custom_bg_url = '';
+  profile.custom_bg_pos_y = '50';
+  profile.custom_bg_zoom = '100';
+  profile.custom_bg_overlay = '50';
+
+  btn.disabled = false;
+  btn.textContent = 'Remove Background';
+  hideBgControls();
+
+  // Switch back to midnight theme
+  profile.theme = 'midnight';
+  updateThemePreview('midnight');
+}
+
+function showBgControls() {
+  document.getElementById('removeBgBtn').style.display = 'inline-block';
+  document.getElementById('bgPositionSection').style.display = 'block';
+  document.getElementById('bgPosY').value = profile.custom_bg_pos_y || '50';
+  document.getElementById('bgZoom').value = profile.custom_bg_zoom || '100';
+  document.getElementById('bgOverlay').value = profile.custom_bg_overlay || '50';
+  document.getElementById('bgPosYVal').textContent = (profile.custom_bg_pos_y || '50') + '%';
+  document.getElementById('bgZoomVal').textContent = (profile.custom_bg_zoom || '100') + '%';
+  document.getElementById('bgOverlayVal').textContent = (profile.custom_bg_overlay || '50') + '%';
+}
+
+function hideBgControls() {
+  document.getElementById('removeBgBtn').style.display = 'none';
+  document.getElementById('bgPositionSection').style.display = 'none';
+}
+
+function updateBgPosition() {
+  const posY = document.getElementById('bgPosY').value;
+  const zoom = document.getElementById('bgZoom').value;
+  const overlay = document.getElementById('bgOverlay').value;
+  document.getElementById('bgPosYVal').textContent = posY + '%';
+  document.getElementById('bgZoomVal').textContent = zoom + '%';
+  document.getElementById('bgOverlayVal').textContent = overlay + '%';
+
+  // Update live preview
+  if (profile.custom_bg_url) {
+    const inner = document.getElementById('previewInner');
+    inner.style.backgroundImage = 'url(' + profile.custom_bg_url + ')';
+    inner.style.backgroundSize = zoom + '%';
+    inner.style.backgroundPosition = 'center ' + posY + '%';
+    inner.style.backgroundRepeat = 'no-repeat';
+  }
+}
+
+// ─── LINKS ───
+async function loadLinks() {
+  const { data: links, error } = await sb.from('orolink_links')
+    .select('*')
+    .eq('user_id', userId)
+    .order('position', { ascending: true });
+
+  if (error) return;
+  currentLinks = links;
+  const total = links.length;
+  const counter = document.getElementById('linkCounter');
+
+  if ((profile.plan || 'free') === 'free') {
+    counter.textContent = total + ' / 5 links used';
+    counter.style.color = total >= 5 ? '#dc2626' : '#999';
+    document.getElementById('linkCount').textContent = total;
+  } else {
+    counter.textContent = total + ' links';
+  }
+
+  const c = document.getElementById('linksList');
+  if (!links.length) {
+    c.innerHTML = '<div class="empty-state"><p>No links yet</p><p style="font-size:12px">Add your first link above</p></div>';
+    return;
+  }
+  c.innerHTML = '';
+  links.forEach(function(l) {
+    const div = document.createElement('div');
+    div.className = 'link-item';
+    div.innerHTML = '<div class="link-info"><div class="link-title">' + esc(l.title) + '</div><div class="link-url">' + esc(l.url) + '</div></div><div class="link-clicks">' + (l.clicks || 0) + ' clicks</div><div class="link-actions"><button class="btn btn-sm btn-outline del-btn">Delete</button></div>';
+    div.querySelector('.del-btn').addEventListener('click', function() { deleteLink(l.id); });
+    c.appendChild(div);
+  });
+}
+
+async function addLink() {
+  const title = document.getElementById('newTitle').value.trim();
+  const url = document.getElementById('newUrl').value.trim();
+  const icon = document.getElementById('newIcon').value;
+  if (!title || !url) { alert('Title and URL are required'); return; }
+
+  // Check link limit for free plan
+  if ((profile.plan || 'free') === 'free') {
+    const { count } = await sb.from('orolink_links').select('*', { count: 'exact', head: true }).eq('user_id', userId);
+    if (count >= 5) { showUpgrade(); return; }
+  }
+
+  const btn = document.getElementById('addBtn');
+  btn.disabled = true; btn.textContent = 'Adding…';
+
+  // Get next position
+  const { data: existing } = await sb.from('orolink_links').select('position').eq('user_id', userId).order('position', { ascending: false }).limit(1);
+  const nextPos = existing && existing.length ? existing[0].position + 1 : 0;
+
+  const { error } = await sb.from('orolink_links').insert({
+    user_id: userId,
+    title: title,
+    url: url,
+    icon: icon,
+    position: nextPos,
+    clicks: 0,
+    is_active: true
+  });
+
+  btn.disabled = false; btn.textContent = 'Add Link';
+  if (error) { alert(error.message); return; }
+  document.getElementById('newTitle').value = '';
+  document.getElementById('newUrl').value = '';
+  loadLinks();
+}
+
+async function deleteLink(id) {
+  if (!confirm('Delete this link?')) return;
+  const { error } = await sb.from('orolink_links').delete().eq('id', id).eq('user_id', userId);
+  if (!error) loadLinks();
+  else alert('Failed to delete link');
+}
+
+// ─── APPEARANCE ───
+async function saveAppearance() {
+  const btn = document.getElementById('saveBtn');
+  btn.disabled = true; btn.textContent = 'Saving…';
+
+  const updateData = {
+    display_name: document.getElementById('profName').value.trim(),
+    bio: document.getElementById('profBio').value.trim(),
+    theme: profile.theme,
+    social_tiktok: document.getElementById('socTiktok').value.trim(),
+    social_instagram: document.getElementById('socInstagram').value.trim(),
+    social_youtube: document.getElementById('socYoutube').value.trim(),
+    social_twitter: document.getElementById('socTwitter').value.trim(),
+    social_facebook: document.getElementById('socFacebook').value.trim()
+  };
+
+  // Save custom colors if Pro+
+  const plan = profile.plan || 'free';
+  if (plan === 'pro' || plan === 'business') {
+    updateData.custom_bg = document.getElementById('colorBg').value;
+    updateData.custom_btn_color = document.getElementById('colorBtn').value;
+    updateData.custom_text_color = document.getElementById('colorText').value;
+  }
+
+  // Save bg position if Business with custom bg
+  if (plan === 'business' && profile.custom_bg_url) {
+    updateData.custom_bg_pos_y = document.getElementById('bgPosY').value;
+    updateData.custom_bg_zoom = document.getElementById('bgZoom').value;
+    updateData.custom_bg_overlay = document.getElementById('bgOverlay').value;
+  }
+
+  const { error } = await sb.from('orolink_profiles').update(updateData).eq('id', userId);
+
+  const m = document.getElementById('appMsg');
+  m.className = error ? 'msg msg-err' : 'msg msg-ok';
+  m.textContent = error ? 'Error: ' + error.message : 'Changes saved!';
+  btn.disabled = false; btn.textContent = 'Save Changes';
+  setTimeout(() => m.className = 'msg', 3000);
+}
+
+async function uploadAvatar() {
+  const file = document.getElementById('avatarFile').files[0];
+  if (!file) return;
+
+  // Validate file size (2MB max)
+  if (file.size > 2 * 1024 * 1024) {
+    alert('File too large. Maximum 2MB.');
+    return;
+  }
+
+  const ext = file.name.split('.').pop().toLowerCase();
+  const filePath = userId + '/avatar.' + ext;
+
+  // Upload to Supabase Storage
+  const { error: uploadErr } = await sb.storage.from('avatars').upload(filePath, file, {
+    cacheControl: '3600',
+    upsert: true
+  });
+
+  if (uploadErr) { alert('Upload failed: ' + uploadErr.message); return; }
+
+  // Get public URL
+  const { data: urlData } = sb.storage.from('avatars').getPublicUrl(filePath);
+  const avatarUrl = urlData.publicUrl + '?t=' + Date.now(); // cache bust
+
+  // Update profile
+  await sb.from('orolink_profiles').update({ avatar_url: avatarUrl }).eq('id', userId);
+  document.getElementById('avatarPreview').innerHTML = '<img src="' + avatarUrl + '" class="avatar-preview">';
+  profile.avatar_url = avatarUrl;
+}
+
+// ─── ANALYTICS ───
+async function loadAnalytics() {
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+  const plan = profile.plan || 'free';
+
+  // Get analytics events — fetch all columns for advanced analytics
+  const { data: events } = await sb.from('orolink_analytics')
+    .select('event_type, link_id, device, referrer, created_at')
+    .eq('user_id', userId)
+    .gte('created_at', thirtyDaysAgo);
+
+  if (!events) return;
+
+  const views = events.filter(e => e.event_type === 'view').length;
+  const clicks = events.filter(e => e.event_type === 'click').length;
+  const ctr = views > 0 ? ((clicks / views) * 100).toFixed(1) : '0';
+
+  document.getElementById('statViews').textContent = views;
+
+  if (plan === 'free') {
+    document.getElementById('statClicks').textContent = '—';
+    document.getElementById('statCtr').textContent = '—';
+    document.getElementById('topLinks').innerHTML = '<p style="color:#999;font-size:13px">Upgrade to Pro to see click data, CTR, and top links. <a href="#" onclick="showUpgrade();return false" style="color:#1a1a1a;font-weight:600">Upgrade →</a></p>';
+    document.getElementById('deviceBreak').innerHTML = '<p style="color:#999;font-size:13px">Device breakdown available on Pro. <a href="#" onclick="showUpgrade();return false" style="color:#1a1a1a;font-weight:600">Upgrade →</a></p>';
+    return;
+  }
+
+  // ─── PRO + BUSINESS: Full analytics ───
+  document.getElementById('statClicks').textContent = clicks;
+  document.getElementById('statCtr').textContent = ctr + '%';
+
+  // Top links by clicks
+  const clickEvents = events.filter(e => e.event_type === 'click' && e.link_id);
+  const linkClicks = {};
+  clickEvents.forEach(e => { linkClicks[e.link_id] = (linkClicks[e.link_id] || 0) + 1; });
+
+  const linkIds = Object.keys(linkClicks);
+  const tl = document.getElementById('topLinks');
+  if (!linkIds.length) {
+    tl.innerHTML = '<p style="color:#999;font-size:13px">No clicks yet. Share your link to start tracking!</p>';
+  } else {
+    const { data: linkData } = await sb.from('orolink_links').select('id, title').in('id', linkIds);
+    const titleMap = {};
+    if (linkData) linkData.forEach(l => titleMap[l.id] = l.title);
+    const sorted = linkIds.sort((a, b) => linkClicks[b] - linkClicks[a]).slice(0, 10);
+    const maxClicks = linkClicks[sorted[0]] || 1;
+    tl.innerHTML = '';
+    sorted.forEach(id => {
+      const pct = Math.round((linkClicks[id] / maxClicks) * 100);
+      tl.innerHTML += '<div style="margin-bottom:10px">'
+        + '<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span style="font-weight:500">' + esc(titleMap[id] || 'Deleted link') + '</span><span style="font-weight:700">' + linkClicks[id] + ' clicks</span></div>'
+        + '<div style="background:#f0f0ec;border-radius:4px;height:6px;overflow:hidden"><div style="background:#1a1a1a;height:100%;width:' + pct + '%;border-radius:4px;transition:width 0.6s ease"></div></div>'
+        + '</div>';
+    });
+  }
+
+  // Device breakdown with bars
+  const devices = {};
+  const totalDeviceEvents = events.length;
+  events.forEach(e => { if (e.device) devices[e.device] = (devices[e.device] || 0) + 1; });
+  const db = document.getElementById('deviceBreak');
+  const deviceColors = { mobile: '#1a1a1a', desktop: '#6b6b6b', tablet: '#999' };
+  let dt = '';
+  const sortedDevices = Object.entries(devices).sort((a, b) => b[1] - a[1]);
+  sortedDevices.forEach(([k, v]) => {
+    const pct = totalDeviceEvents > 0 ? Math.round((v / totalDeviceEvents) * 100) : 0;
+    dt += '<div style="margin-bottom:10px">'
+      + '<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px"><span style="font-weight:500;text-transform:capitalize">' + esc(k) + '</span><span style="font-weight:700">' + pct + '% <span style="font-weight:400;color:#999">(' + v + ')</span></span></div>'
+      + '<div style="background:#f0f0ec;border-radius:4px;height:6px;overflow:hidden"><div style="background:' + (deviceColors[k] || '#1a1a1a') + ';height:100%;width:' + pct + '%;border-radius:4px;transition:width 0.6s ease"></div></div>'
+      + '</div>';
+  });
+  db.innerHTML = dt || '<p style="color:#999;font-size:13px">No data yet</p>';
+
+  // ─── BUSINESS ONLY: Advanced Analytics ───
+  if (plan !== 'business') {
+    // Show upgrade prompt for advanced sections
+    document.getElementById('chartSection').style.display = 'block';
+    document.getElementById('chartSection').innerHTML = '<h3 style="font-size:15px;margin-bottom:4px;font-weight:600">Views Over Time</h3>'
+      + '<p style="color:#999;font-size:13px;margin-top:8px">Daily traffic chart available on Business plan. <a href="#" onclick="showUpgrade();return false" style="color:#1a1a1a;font-weight:600">Upgrade →</a></p>';
+    document.getElementById('sourcesSection').style.display = 'block';
+    document.getElementById('sourcesSection').innerHTML = '<h3 style="font-size:15px;margin-bottom:4px;font-weight:600">Traffic Sources</h3>'
+      + '<p style="color:#999;font-size:13px;margin-top:8px">See where your visitors come from on Business plan. <a href="#" onclick="showUpgrade();return false" style="color:#1a1a1a;font-weight:600">Upgrade →</a></p>';
+    document.getElementById('peakSection').style.display = 'block';
+    document.getElementById('peakSection').innerHTML = '<h3 style="font-size:15px;margin-bottom:4px;font-weight:600">Peak Hours</h3>'
+      + '<p style="color:#999;font-size:13px;margin-top:8px">See when your page gets the most visits on Business plan. <a href="#" onclick="showUpgrade();return false" style="color:#1a1a1a;font-weight:600">Upgrade →</a></p>';
+    return;
+  }
+
+  // ═══ ADVANCED: 30-Day Views Chart ═══
+  document.getElementById('chartSection').style.display = 'block';
+  const viewEvents = events.filter(e => e.event_type === 'view');
+  const dailyCounts = {};
+  const today = new Date();
+
+  // Initialize all 30 days to 0
+  for (let i = 29; i >= 0; i--) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i);
+    const key = d.toISOString().split('T')[0];
+    dailyCounts[key] = 0;
+  }
+
+  // Count views per day
+  viewEvents.forEach(e => {
+    const key = e.created_at.split('T')[0];
+    if (dailyCounts[key] !== undefined) dailyCounts[key]++;
+  });
+
+  const days = Object.keys(dailyCounts).sort();
+  const maxDaily = Math.max(...Object.values(dailyCounts), 1);
+  const chartEl = document.getElementById('viewsChart');
+  chartEl.innerHTML = '';
+
+  days.forEach((day, i) => {
+    const count = dailyCounts[day];
+    const heightPct = Math.max((count / maxDaily) * 100, 2);
+    const bar = document.createElement('div');
+    bar.style.cssText = 'flex:1;background:#E2FF00;border-radius:3px 3px 0 0;min-width:4px;height:' + heightPct + '%;transition:height 0.4s ease ' + (i * 15) + 'ms;cursor:pointer;position:relative';
+    if (count > 0) bar.style.background = '#1a1a1a';
+    bar.title = day + ': ' + count + ' views';
+
+    // Hover tooltip
+    bar.addEventListener('mouseenter', function() {
+      this.style.background = '#E2FF00';
+      const tip = document.createElement('div');
+      tip.className = 'chart-tip';
+      tip.style.cssText = 'position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:4px 8px;border-radius:6px;font-size:10px;white-space:nowrap;pointer-events:none;z-index:10';
+      tip.textContent = count + ' view' + (count !== 1 ? 's' : '') + ' · ' + new Date(day).toLocaleDateString('en-MY', { month: 'short', day: 'numeric' });
+      this.appendChild(tip);
+    });
+    bar.addEventListener('mouseleave', function() {
+      this.style.background = count > 0 ? '#1a1a1a' : '#E2FF00';
+      const tip = this.querySelector('.chart-tip');
+      if (tip) tip.remove();
+    });
+
+    chartEl.appendChild(bar);
+  });
+
+  // Chart labels
+  const labelsEl = document.getElementById('chartLabels');
+  const firstDay = new Date(days[0]);
+  const lastDay = new Date(days[days.length - 1]);
+  labelsEl.innerHTML = '<span>' + firstDay.toLocaleDateString('en-MY', { month: 'short', day: 'numeric' }) + '</span>'
+    + '<span>' + lastDay.toLocaleDateString('en-MY', { month: 'short', day: 'numeric' }) + '</span>';
+
+  // ═══ ADVANCED: Traffic Sources ═══
+  document.getElementById('sourcesSection').style.display = 'block';
+  const sources = {};
+  const sourceMap = {
+    'instagram': { name: 'Instagram', color: '#E1306C' },
+    'tiktok': { name: 'TikTok', color: '#000000' },
+    'facebook': { name: 'Facebook', color: '#1877F2' },
+    'twitter': { name: 'Twitter/X', color: '#1DA1F2' },
+    't.co': { name: 'Twitter/X', color: '#1DA1F2' },
+    'youtube': { name: 'YouTube', color: '#FF0000' },
+    'linkedin': { name: 'LinkedIn', color: '#0A66C2' },
+    'google': { name: 'Google Search', color: '#4285F4' },
+    'whatsapp': { name: 'WhatsApp', color: '#25D366' },
+    'telegram': { name: 'Telegram', color: '#26A5E4' },
+    'shopee': { name: 'Shopee', color: '#EE4D2D' },
+    'tiktokshop': { name: 'TikTok Shop', color: '#000000' }
+  };
+
+  viewEvents.forEach(e => {
+    const ref = (e.referrer || '').toLowerCase();
+    let sourceName = 'Direct';
+    let sourceColor = '#999';
+
+    if (ref) {
+      let matched = false;
+      for (const [key, info] of Object.entries(sourceMap)) {
+        if (ref.includes(key)) {
+          sourceName = info.name;
+          sourceColor = info.color;
+          matched = true;
+          break;
+        }
+      }
+      if (!matched && ref.length > 0) {
+        // Extract domain name
+        try {
+          const url = new URL(ref);
+          sourceName = url.hostname.replace('www.', '');
+          sourceColor = '#6b6b6b';
+        } catch (err) {
+          sourceName = 'Other';
+          sourceColor = '#6b6b6b';
+        }
+      }
+    }
+
+    sources[sourceName] = sources[sourceName] || { count: 0, color: sourceColor };
+    sources[sourceName].count++;
+  });
+
+  const srcEl = document.getElementById('trafficSources');
+  const sortedSources = Object.entries(sources).sort((a, b) => b[1].count - a[1].count);
+  const totalViews = viewEvents.length || 1;
+
+  if (!sortedSources.length) {
+    srcEl.innerHTML = '<p style="color:#999;font-size:13px">No traffic data yet. Share your link to start tracking!</p>';
+  } else {
+    let srcHtml = '';
+    sortedSources.forEach(([name, data]) => {
+      const pct = Math.round((data.count / totalViews) * 100);
+      srcHtml += '<div style="margin-bottom:12px">'
+        + '<div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;margin-bottom:5px">'
+        + '<span style="display:flex;align-items:center;gap:8px"><span style="width:8px;height:8px;border-radius:50%;background:' + data.color + ';flex-shrink:0"></span><span style="font-weight:500">' + esc(name) + '</span></span>'
+        + '<span style="font-weight:700">' + pct + '% <span style="font-weight:400;color:#999">(' + data.count + ')</span></span>'
+        + '</div>'
+        + '<div style="background:#f0f0ec;border-radius:4px;height:8px;overflow:hidden"><div style="background:' + data.color + ';height:100%;width:' + pct + '%;border-radius:4px;transition:width 0.6s ease"></div></div>'
+        + '</div>';
+    });
+    srcEl.innerHTML = srcHtml;
+  }
+
+  // ═══ ADVANCED: Peak Hours ═══
+  document.getElementById('peakSection').style.display = 'block';
+  const hourCounts = new Array(24).fill(0);
+
+  viewEvents.forEach(e => {
+    const hour = new Date(e.created_at).getHours();
+    hourCounts[hour]++;
+  });
+
+  const maxHour = Math.max(...hourCounts, 1);
+  const peakEl = document.getElementById('peakHours');
+  peakEl.innerHTML = '';
+
+  hourCounts.forEach((count, hour) => {
+    const heightPct = Math.max((count / maxHour) * 100, 3);
+    const isPeak = count === maxHour && count > 0;
+    const bar = document.createElement('div');
+    bar.style.cssText = 'flex:1;border-radius:3px 3px 0 0;min-width:6px;height:' + heightPct + '%;transition:height 0.4s ease ' + (hour * 20) + 'ms;cursor:pointer;position:relative;background:' + (isPeak ? '#E2FF00' : (count > 0 ? '#1a1a1a' : '#f0f0ec'));
+
+    bar.addEventListener('mouseenter', function() {
+      this.style.background = '#E2FF00';
+      const tip = document.createElement('div');
+      tip.className = 'chart-tip';
+      tip.style.cssText = 'position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:4px 8px;border-radius:6px;font-size:10px;white-space:nowrap;pointer-events:none;z-index:10';
+      const ampm = hour >= 12 ? 'PM' : 'AM';
+      const h12 = hour === 0 ? 12 : (hour > 12 ? hour - 12 : hour);
+      tip.textContent = count + ' view' + (count !== 1 ? 's' : '') + ' · ' + h12 + ':00 ' + ampm;
+      this.appendChild(tip);
+    });
+    bar.addEventListener('mouseleave', function() {
+      this.style.background = isPeak ? '#E2FF00' : (count > 0 ? '#1a1a1a' : '#f0f0ec');
+      const tip = this.querySelector('.chart-tip');
+      if (tip) tip.remove();
+    });
+
+    peakEl.appendChild(bar);
+  });
+
+  // Peak hours labels
+  const peakLabelsEl = document.getElementById('peakLabels');
+  peakLabelsEl.innerHTML = '<span>12AM</span><span>6AM</span><span>12PM</span><span>6PM</span><span>11PM</span>';
+}
+
+// ─── SETTINGS ───
+function copyUrl() {
+  navigator.clipboard.writeText('https://link.orolearning.org/@' + profile.username);
+  const s = document.getElementById('myUrl');
+  s.textContent = 'Copied!';
+  setTimeout(() => s.textContent = 'link.orolearning.org/@' + profile.username, 2000);
+}
+function copyRef() {
+  navigator.clipboard.writeText(profile.referral_code);
+  const s = document.getElementById('myRef');
+  s.textContent = 'Copied!';
+  setTimeout(() => s.textContent = profile.referral_code, 2000);
+}
+
+async function exportData() {
+  const { data: prof } = await sb.from('orolink_profiles').select('*').eq('id', userId).maybeSingle();
+  const { data: links } = await sb.from('orolink_links').select('*').eq('user_id', userId);
+  const { data: analytics } = await sb.from('orolink_analytics').select('*').eq('user_id', userId);
+
+  const exportObj = {
+    exported_at: new Date().toISOString(),
+    profile: prof,
+    links: links || [],
+    analytics: analytics || []
+  };
+
+  const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'orolink-data.json';
+  a.click();
+}
+
+async function deleteAccount() {
+  if (!confirm('Are you absolutely sure? All your data will be permanently deleted.')) return;
+  if (!confirm('Last chance — this cannot be undone. Delete everything?')) return;
+
+  // Delete user data from tables
+  await sb.from('orolink_analytics').delete().eq('user_id', userId);
+  await sb.from('orolink_links').delete().eq('user_id', userId);
+  await sb.from('orolink_profiles').delete().eq('id', userId);
+
+  // Delete avatar from storage
+  const { data: files } = await sb.storage.from('avatars').list(userId);
+  if (files && files.length) {
+    await sb.storage.from('avatars').remove(files.map(f => userId + '/' + f.name));
+  }
+
+  // Sign out (note: full auth.admin.deleteUser requires server-side, this clears session)
+  await sb.auth.signOut();
+  window.location.href = '/';
+}
+
+// ─── UPGRADE ───
+function showUpgrade() { document.getElementById('upgradeModal').classList.add('show'); }
+function closeUpgrade() { document.getElementById('upgradeModal').classList.remove('show'); }
+function requestUpgrade(plan) {
+  const msg = encodeURIComponent('Hi, I want to upgrade my OroLink to ' + plan.charAt(0).toUpperCase() + plan.slice(1) + ' plan. My username is: ' + profile.username + ', Email: ' + (profile.email || ''));
+  window.open('https://wa.me/60163695701?text=' + msg, '_blank');
+}
+
+// ─── TABS ───
+function showTab(t, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-' + t).classList.add('active');
+  if (el) el.classList.add('active');
+  if (t === 'analytics') loadAnalytics();
+}
+
+// ─── AUTH ───
+async function logout() {
+  await sb.auth.signOut();
+  window.location.href = '/login.html';
+}
+
+// ─── HELPERS ───
+function esc(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+// Boot
+init();
+</script>
+</body>
+</html>
