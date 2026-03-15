@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OroLink</title>
+<script>
+// GitHub Pages 404 routing for /@username
+// If the path matches /@username, redirect to profile.html with username as query param
+// profile.html reads the username from either the path or query param
+const path = window.location.pathname;
+const match = path.match(/^\/@([a-zA-Z0-9_]+)$/);
+if (match) {
+  // Replace the URL to keep /@username visible while loading profile.html
+  const profileUrl = '/profile.html?u=' + match[1];
+  window.location.replace(profileUrl);
+} else {
+  // Not a profile URL — show actual 404
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('notfound').style.display = 'flex';
+  });
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#F8F8F8;color:#1a1a1a;font-family:'DM Sans',system-ui,sans-serif;min-height:100vh}
+#notfound{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;text-align:center}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:40px;text-decoration:none;color:#1a1a1a;font-weight:700;font-size:20px}
+.logo-mark{width:36px;height:36px;border-radius:10px;background:#E2FF00;display:flex;align-items:center;justify-content:center;color:#1a1a1a;font-weight:800;font-size:18px}
+h1{font-size:48px;font-weight:800;margin-bottom:8px;letter-spacing:-1px}
+p{color:#6b6b6b;font-size:16px;margin-bottom:24px}
+a.btn{display:inline-block;padding:12px 28px;background:#1a1a1a;color:#fff;border-radius:10px;text-decoration:none;font-weight:600;font-size:15px;transition:background 0.2s}
+a.btn:hover{background:#333}
+</style>
+</head>
+<body>
+<div id="notfound">
+<a href="/" class="logo"><div class="logo-mark">O</div>OroLink</a>
+<h1>404</h1>
+<p>This page doesn't exist.</p>
+<a href="/" class="btn">Go home</a>
+</div>
+</body>
+</html>
